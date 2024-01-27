@@ -32,7 +32,7 @@ function Profile() {
           aria-expanded={open ? 'true' : undefined}
         >
           <Avatar
-            sx={{ width: 30, height: 30 }}
+            sx={{ width: 34, height: 34 }}
             alt='Trung'
             src='https://lh3.googleusercontent.com/a/ACg8ocIez4ghLv_catre1Fmhf6Mjs703HWZYanI4NJ07cVHnA7I=s504-c-no'
           />
