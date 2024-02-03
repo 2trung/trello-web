@@ -9,7 +9,8 @@ import {
   useSensor,
   useSensors,
   DragOverlay,
-  defaultDropAnimationSideEffects
+  defaultDropAnimationSideEffects,
+  closestCorners
 } from '@dnd-kit/core'
 import { arrayMove } from '@dnd-kit/sortable'
 import { useEffect, useState } from 'react'
@@ -120,7 +121,9 @@ function BoardContent({ board }) {
       onDragStart={handelDragStart}
       onDragOver={handelDragOver}
       onDragEnd={handelDragEnd}
-      sensors={sensors}>
+      sensors={sensors}
+      collisionDetection={closestCorners}
+    >
       <Box sx={{
         bgcolor: (theme) => (theme.palette.mode == 'dark' ? '#34495e' : '#1976d2'),
         width: '100%',
