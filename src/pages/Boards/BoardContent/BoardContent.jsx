@@ -20,7 +20,9 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import Column from './ListColumns/Column/Column'
 import Card from './ListColumns/Column/ListCards/Card/Card'
 
-import { cloneDeep } from 'lodash'
+import { cloneDeep, isEmpty } from 'lodash'
+
+import { generatePlaceHolderCard } from '~/utils/formatter'
 
 const ACTIVE_DRAG_ITEM_TYPE = {
   COLUMN: 'ACTIVE_DRAG_ITEM_TYPE_COLUMN',
@@ -78,6 +80,10 @@ function BoardContent({ board }) {
 
       if (nextActiveColumn) {
         nextActiveColumn.cards = nextActiveColumn.cards.filter(card => card._id !== activeDraggingCardId)
+
+        if (isEmpty(nextActiveColumn.cards))
+          nextActiveColumn.cards = [generatePlaceHolderCard(nextActiveColumn)]
+
         nextActiveColumn.cardOrderIds = nextActiveColumn.cards.map(card => card._id)
       }
 
@@ -90,6 +96,7 @@ function BoardContent({ board }) {
             ...activeDragingCardData,
             columnId: nextOverColumn._id
           })
+        nextOverColumn.cards = nextOverColumn.cards.filter(card => !card.FE_PlaceHolderCard)
         nextOverColumn.cardOrderIds = nextOverColumn.cards.map(card => card._id)
       }
       return nextColumns
