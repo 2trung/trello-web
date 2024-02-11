@@ -20,7 +20,7 @@ function Card({ card }) {
     transform: CSS.Translate.toString(transform),
     transition,
     opacity: isDragging ? 0.5 : undefined,
-    border: isDragging ? '2px solid #1565c0' : undefined
+    border: isDragging ? '1px solid #1565c0' : undefined
   }
 
   const showCardAction = () => {
@@ -34,7 +34,9 @@ function Card({ card }) {
         cursor: 'pointer',
         boxShadow: '0 1px 1px rgba(0, 0, 0, 0.2)',
         overflow: 'unset',
-        display: card?.FE_PlaceHolderCard ? 'none' : 'block'
+        display: card?.FE_PlaceHolderCard ? 'none' : 'block',
+        border: '1px solid transparent',
+        '&:hover': { borderColor: (theme) => theme.palette.primary.main }
       }}
     >
       {card?.cover && <CardMedia sx={{ height: 140 }} image={card?.cover} /> }
