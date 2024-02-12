@@ -30,7 +30,7 @@ const ACTIVE_DRAG_ITEM_TYPE = {
   CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD'
 }
 
-function BoardContent({ board, createNewColumn, createNewCard }) {
+function BoardContent({ board, createNewColumn, createNewCard, moveColumn }) {
   // const pointerSensor = useSensor(PointerSensor, { activationConstraint: { distance: 10 } })
 
   const mouseSensor = useSensor(MouseSensor, { activationConstraint: { distance: 10 } })
@@ -114,6 +114,7 @@ function BoardContent({ board, createNewColumn, createNewCard }) {
       setOldColumnsWhenDraggingCard(findColumnByCardId(event?.active?.id))
     }
   }
+
   const handelDragOver = (event) => {
     if (activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN) return
 
@@ -187,7 +188,8 @@ function BoardContent({ board, createNewColumn, createNewCard }) {
         const oldColumnIndex = orderedColumns.findIndex(c => c._id === active.id)
         const newColumnIndex = orderedColumns.findIndex(c => c._id === over.id)
         const newOrderedColumns = arrayMove(orderedColumns, oldColumnIndex, newColumnIndex)
-        // const newOrderedColumnsIds = newOrderedColumns.map(c => c._id)
+        moveColumn(newOrderedColumns)
+
         setOrderedColumns(newOrderedColumns)
       }
     }
