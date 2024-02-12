@@ -14,6 +14,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <ToastContainer
       position="bottom-right"
       theme="colored"
+      autoClose={3000}
     />
   </CssVarsProvider>
 )
