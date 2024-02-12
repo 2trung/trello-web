@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { toast } from 'react-toastify'
 import Box from '@mui/material/Box'
 import Column from './Column/Column'
 import TextField from '@mui/material/TextField'
@@ -14,7 +15,7 @@ function ListColumns({ columns }) {
   const [newColumnTitle, setNewColumnTitle] = useState('')
   const addNewColumn = () => {
     if (!newColumnTitle) {
-      // console.log('Please enter a title')
+      toast.error('Please enter a title!')
       return
     }
     toggleNewColumnForm()

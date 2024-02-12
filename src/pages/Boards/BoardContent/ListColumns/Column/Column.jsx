@@ -19,6 +19,7 @@ import CloseIcon from '@mui/icons-material/Close'
 import Button from '@mui/material/Button'
 import DragHandleIcon from '@mui/icons-material/DragHandle'
 import ListCards from './ListCards/ListCards'
+import { toast } from 'react-toastify'
 import { mapOrder } from '~/utils/sorts'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
@@ -52,7 +53,7 @@ function Column({ column }) {
   const [newCardTitle, setNewCardTitle] = useState('')
   const addNewCard = () => {
     if (!newCardTitle) {
-      // console.log('Please enter a title')
+      toast.error('Please enter a title!')
       return
     }
     toggleNewCardForm()
