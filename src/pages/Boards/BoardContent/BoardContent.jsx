@@ -16,12 +16,9 @@ import {
 import { MouseSensor, TouchSensor } from '~/customLibs/DndKitSensors'
 import { arrayMove } from '@dnd-kit/sortable'
 import { useCallback, useEffect, useRef, useState } from 'react'
-
 import Column from './ListColumns/Column/Column'
 import Card from './ListColumns/Column/ListCards/Card/Card'
-
 import { cloneDeep, isEmpty } from 'lodash'
-
 import { generatePlaceHolderCard } from '~/utils/formatter'
 
 const ACTIVE_DRAG_ITEM_TYPE = {
@@ -29,7 +26,7 @@ const ACTIVE_DRAG_ITEM_TYPE = {
   CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD'
 }
 
-function BoardContent({ board, createNewColumn, createNewCard, moveColumn, moveCardSameColumn, moveCardBetweenColumnsBE }) {
+function BoardContent({ board, createNewColumn, createNewCard, moveColumn, moveCardSameColumn, moveCardBetweenColumnsBE, deleteColumn }) {
   // const pointerSensor = useSensor(PointerSensor, { activationConstraint: { distance: 10 } })
 
   const mouseSensor = useSensor(MouseSensor, { activationConstraint: { distance: 10 } })
@@ -265,6 +262,7 @@ function BoardContent({ board, createNewColumn, createNewCard, moveColumn, moveC
           columns={orderedColumns}
           createNewColumn={createNewColumn}
           createNewCard={createNewCard}
+          deleteColumn={deleteColumn}
         />
         <DragOverlay dropAnimation={dropAnimation}>
           {(!activeDragItemType) && null}
