@@ -1,6 +1,5 @@
 import Box from '@mui/material/Box'
 import ListColumns from './ListColumns/ListColumns'
-import { mapOrder } from '~/utils/sorts'
 import {
   DndContext,
   // PointerSensor,
@@ -30,7 +29,7 @@ const ACTIVE_DRAG_ITEM_TYPE = {
   CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD'
 }
 
-function BoardContent({ board, createNewColumn, createNewCard, moveColumn }) {
+function BoardContent({ board, createNewColumn, createNewCard, moveColumn, moveCardSameColumn, moveCardBetweenColumnsBE }) {
   // const pointerSensor = useSensor(PointerSensor, { activationConstraint: { distance: 10 } })
 
   const mouseSensor = useSensor(MouseSensor, { activationConstraint: { distance: 10 } })
@@ -50,7 +49,7 @@ function BoardContent({ board, createNewColumn, createNewCard, moveColumn }) {
   const lastOverId = useRef(null)
 
   useEffect(() => {
-    setOrderedColumns(mapOrder(board?.columns, board?.columnOrderIds, '_id'))
+    setOrderedColumns(board.columns)
   }, [board])
 
   const findColumnByCardId = (cardId) => {
@@ -64,7 +63,8 @@ function BoardContent({ board, createNewColumn, createNewCard, moveColumn }) {
     activeDraggingCardId,
     activeDragingCardData,
     overColumn,
-    overCardId
+    overCardId,
+    triggerFrom
   ) => {
     setOrderedColumns(prevColumns => {
       const overCardIndex = overColumn?.cards?.findIndex(card => card._id === overCardId)
@@ -99,6 +99,14 @@ function BoardContent({ board, createNewColumn, createNewCard, moveColumn }) {
           })
         nextOverColumn.cards = nextOverColumn.cards.filter(card => !card.FE_PlaceHolderCard)
         nextOverColumn.cardOrderIds = nextOverColumn.cards.map(card => card._id)
+      }
+      if (triggerFrom === 'handelDragEnd') {
+        moveCardBetweenColumnsBE(
+          activeDraggingCardId,
+          oldColumnsWhenDraggingCard._id,
+          nextOverColumn._id,
+          nextColumns
+        )
       }
       return nextColumns
 
@@ -138,7 +146,8 @@ function BoardContent({ board, createNewColumn, createNewCard, moveColumn }) {
         activeDraggingCardId,
         activeDragingCardData,
         overColumn,
-        overCardId
+        overCardId,
+        'handelDragOver'
       )
     }
   }
@@ -162,12 +171,14 @@ function BoardContent({ board, createNewColumn, createNewCard, moveColumn }) {
           activeDraggingCardId,
           activeDragingCardData,
           overColumn,
-          overCardId
+          overCardId,
+          'handelDragEnd'
         )
       } else {
         const oldCardIndex = oldColumnsWhenDraggingCard?.cards?.findIndex(card => card._id === activeDragItemId)
         const newCardIndex = overColumn?.cards?.findIndex(card => card._id === overCardId)
         const newOrderedCard = arrayMove(oldColumnsWhenDraggingCard?.cards, oldCardIndex, newCardIndex)
+        const newOrderedCardIds = newOrderedCard.map(card => card._id)
 
         setOrderedColumns(prevColumns => {
           const nextColumns = cloneDeep(prevColumns)
@@ -176,10 +187,12 @@ function BoardContent({ board, createNewColumn, createNewCard, moveColumn }) {
 
           targetColumn.cards = newOrderedCard
 
-          targetColumn.cardOrderIds = newOrderedCard.map(card => card._id)
+          targetColumn.cardOrderIds = newOrderedCardIds
 
           return nextColumns
         })
+
+        moveCardSameColumn(newOrderedCard, newOrderedCardIds, oldColumnsWhenDraggingCard._id)
       }
     }
 

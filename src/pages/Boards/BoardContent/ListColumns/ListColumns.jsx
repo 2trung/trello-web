@@ -13,7 +13,7 @@ function ListColumns({ columns, createNewColumn, createNewCard }) {
   const toggleNewColumnForm = () => setOpenNewColumnForm(!openNewColumnForm)
 
   const [newColumnTitle, setNewColumnTitle] = useState('')
-  const addNewColumn = async () => {
+  const addNewColumn = () => {
     if (!newColumnTitle) {
       toast.error('Please enter a title!')
       return
@@ -21,7 +21,7 @@ function ListColumns({ columns, createNewColumn, createNewCard }) {
     const newColumnData = {
       title: newColumnTitle
     }
-    await createNewColumn(newColumnData)
+    createNewColumn(newColumnData)
     toggleNewColumnForm()
     setNewColumnTitle('')
   }
